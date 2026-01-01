@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<title>Profilimi Kiralıyorum</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+body{
+margin:0; font-family:Poppins;
+min-height:100vh;
+display:flex; align-items:center; justify-content:center;
+background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+color:#fff;
+}
+.box{
+width:100%; max-width:420px;
+background:rgba(255,255,255,.08);
+backdrop-filter:blur(14px);
+padding:30px;
+border-radius:20px;
+box-shadow:0 20px 40px rgba(0,0,0,.4);
+}
+.logo{text-align:center;margin-bottom:15px;}
+.logo img{max-width:200px;}
+input,button{
+width:100%; padding:12px; margin-bottom:12px;
+border-radius:10px; border:none;
+font-family:Poppins;
+}
+input{background:rgba(255,255,255,.15); color:#fff;}
+button{
+background:linear-gradient(135deg,#ffb347,#ffcc33);
+font-weight:600; cursor:pointer;
+}
+.success{display:none;text-align:center;}
+</style>
+</head>
+<body>
+<div class="box">
+<div class="logo"><img src="logo.png"></div>
+<form id="form">
+<input name="isim" placeholder="İsim" required>
+<input name="soyisim" placeholder="Soyisim" required>
+<input name="telefon" placeholder="Telefon" required>
+<input name="instagram" placeholder="Instagram" required>
+<input type="file" name="foto" accept="image/*" required>
+<button>Başvur</button>
+</form>
+<div class="success" id="success">
+<h3>Başvurunuz alındı</h3>
+<p>Seçilmeniz halinde sizinle iletişime geçilecektir.</p>
+</div>
+</div>
+
+<script>
+document.getElementById("form").onsubmit = async e => {
+e.preventDefault();
+const f = e.target;
+const file = f.foto.files[0];
+const reader = new FileReader();
+reader.onload = async () => {
+const res = await fetch("/api/basvuru",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+isim:f.isim.value,
+soyisim:f.soyisim.value,
+telefon:f.telefon.value,
+instagram:f.instagram.value,
+foto:reader.result
+})
+});
+if(res.ok){
+f.style.display="none";
+document.getElementById("success").style.display="block";
+}
+};
+reader.readAsDataURL(file);
+};
+</script>
+</body>
+</html>

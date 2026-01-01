@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"><title>Admin</title></head>
+<body style="font-family:Poppins;background:#111;color:#fff;padding:20px">
+<h2>Admin Panel</h2>
+<input id="sifre" type="password" placeholder="Şifre">
+<button onclick="giris()">Giriş</button>
+<div id="list"></div>
+
+<script>
+const SIFRE="12345";
+function giris(){
+if(document.getElementById("sifre").value!==SIFRE)return alert("Hatalı şifre");
+fetch("/api/admin").then(r=>r.json()).then(d=>{
+let html="";
+d.forEach(b=>{
+html+=`<hr>
+<b>${b.isim} ${b.soyisim}</b><br>
+${b.telefon}<br>
+${b.instagram}<br>
+<img src="${b.foto}" width="150">`;
+});
+document.getElementById("list").innerHTML=html;
+});
+}
+</script>
+</body>
+</html>
